@@ -379,7 +379,7 @@ CHANGE COLUMN `xml_responce` `xml_responce` TEXT CHARACTER SET 'utf8' COLLATE 'u
             'link' => 'http://www.intrum.com',
             'author' =>  'Intrum.com',
             'copyright' =>  'Intrum.com 2015',
-            'version' =>  '1.4.2'
+            'version' =>  '1.4.3'
         );
     }
 
