@@ -129,6 +129,14 @@ class Shopware_Plugins_Frontend_Intrum_Bootstrap extends Shopware_Components_Plu
             'value' => '',
             'scope' => \Shopware\Models\Config\Element::SCOPE_SHOP
         ));
+        $form->setElement('select', 'credit_check_enabled', array(
+            'label' => 'Enable Credit check for this shop',
+            'store' => array(
+                array('enable', 'Enable'),
+                array('disable', 'Disable')
+            ),
+            'scope' => \Shopware\Models\Config\Element::SCOPE_SHOP
+        ));
         $form->setElement('select', 'plugin_mode', array(
             'label' => 'Mode',
             'store' => array(
@@ -378,8 +386,8 @@ CHANGE COLUMN `xml_responce` `xml_responce` TEXT CHARACTER SET 'utf8' COLLATE 'u
             'description' => 'Intrum Credit design check',
             'link' => 'http://www.intrum.com',
             'author' =>  'Intrum.com',
-            'copyright' =>  'Intrum.com 2015',
-            'version' =>  '1.4.3'
+            'copyright' =>  'Intrum.com 2020',
+            'version' =>  '1.4.4'
         );
     }
 
@@ -435,6 +443,10 @@ CHANGE COLUMN `xml_responce` `xml_responce` TEXT CHARACTER SET 'utf8' COLLATE 'u
         $minAmount = intval($config->get("minimal_amount"));
         $user = $this->getUser();		
         $methods = $args->getReturn();
+        $plugin_enable = $config->get("credit_check_enabled");
+        if (!isset($plugin_enable) || $plugin_enable != 'enable') {
+            return $methods;
+        }
         if(empty($user)) {
             return array(
                 'LOCALECODE' => Shopware()->Shop()->getLocale()->getLocale(),
@@ -527,6 +539,10 @@ CHANGE COLUMN `xml_responce` `xml_responce` TEXT CHARACTER SET 'utf8' COLLATE 'u
         $mode = $config->get("plugin_mode");
         $minAmount = intval($config->get("minimal_amount"));
         $user = $this->getUser();
+        $plugin_enable = $config->get("credit_check_enabled");
+        if (!isset($plugin_enable) || $plugin_enable != 'enable') {
+            return;
+        }
         if(empty($user)) {
             return;
         }
@@ -620,6 +636,10 @@ CHANGE COLUMN `xml_responce` `xml_responce` TEXT CHARACTER SET 'utf8' COLLATE 'u
        // if ($args->getRequest()->getControllerName() == 'checkout' && $args->getRequest()->getActionName() == 'finish') {
             /* @var $config Enlight_Config */
             $config = $this->Config();
+            $plugin_enable = $config->get("credit_check_enabled");
+            if (!isset($plugin_enable) || $plugin_enable != 'enable') {
+                return null;
+            }
             $mode = $config->get("plugin_mode");
             $minAmount = intval($config->get("minimal_amount"));
             $user = $this->getUser();

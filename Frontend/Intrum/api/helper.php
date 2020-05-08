@@ -1,6 +1,6 @@
 <?php
 
-function getClientIp() {
+function getIntrumCDPClientIp() {
     $ipaddress = '';
     if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
         $ipaddress = $_SERVER['HTTP_CLIENT_IP'];
@@ -132,7 +132,7 @@ function CreateShopWareShopRequest($user, $billing, $shipping, $totalAmount, Enl
     $request->setExtraInfo($extraInfo);
 
     $extraInfo["Name"] = 'IP';
-    $extraInfo["Value"] = getClientIp();
+    $extraInfo["Value"] = getIntrumCDPClientIp();
     $request->setExtraInfo($extraInfo);
 
     $tmx_enable = $config->get("tmx_enable");
@@ -173,7 +173,7 @@ function CreateShopWareShopRequest($user, $billing, $shipping, $totalAmount, Enl
     $request->setExtraInfo($extraInfo);
 
     $extraInfo["Name"] = 'CONNECTIVTY_MODULE';
-    $extraInfo["Value"] = 'Intrum ShopWare 5.2.X module 1.4.3';
+    $extraInfo["Value"] = 'Intrum ShopWare 5.2.X module 1.4.4';
     $request->setExtraInfo($extraInfo);	
 
     return $request;
@@ -253,7 +253,7 @@ function CreateShopWareOrderRequest($user, $billing, $shipping, \Shopware\Models
     $request->setExtraInfo($extraInfo);
 
     $extraInfo["Name"] = 'IP';
-    $extraInfo["Value"] = getClientIp();
+    $extraInfo["Value"] = getIntrumCDPClientIp();
     $request->setExtraInfo($extraInfo);
 
     $tmx_enable = $config->get("tmx_enable");
@@ -302,7 +302,7 @@ function CreateShopWareOrderRequest($user, $billing, $shipping, \Shopware\Models
     $request->setExtraInfo($extraInfo);
 
     $extraInfo["Name"] = 'CONNECTIVTY_MODULE';
-    $extraInfo["Value"] = 'Intrum ShopWare 5.2.X module 1.4.3';
+    $extraInfo["Value"] = 'Intrum ShopWare 5.2.X module 1.4.4';
     $request->setExtraInfo($extraInfo);	
 
     return $request;
