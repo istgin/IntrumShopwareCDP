@@ -130,7 +130,7 @@ class Shopware_Plugins_Frontend_Intrum_Bootstrap extends Shopware_Components_Plu
             'scope' => \Shopware\Models\Config\Element::SCOPE_SHOP
         ));
         $form->setElement('select', 'credit_check_enabled', array(
-            'label' => 'Enable Credit check for this shop',
+            'label' => 'Enable credit check for this shop',
             'store' => array(
                 array('enable', 'Enable'),
                 array('disable', 'Disable')
