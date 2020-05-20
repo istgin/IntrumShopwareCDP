@@ -387,7 +387,7 @@ CHANGE COLUMN `xml_responce` `xml_responce` TEXT CHARACTER SET 'utf8' COLLATE 'u
             'link' => 'http://www.intrum.com',
             'author' =>  'Intrum.com',
             'copyright' =>  'Intrum.com 2020',
-            'version' =>  '1.4.4'
+            'version' =>  '1.4.5'
         );
     }
 
@@ -745,6 +745,10 @@ CHANGE COLUMN `xml_responce` `xml_responce` TEXT CHARACTER SET 'utf8' COLLATE 'u
             ) {
             /* @var $config Enlight_Config */
             $config = $this->Config();
+            $plugin_enable = $config->get("credit_check_enabled");
+            if (!isset($plugin_enable) || $plugin_enable != 'enable') {
+                return null;
+            }
             $mode = $config->get("plugin_mode");
             $minAmount = intval($config->get("minimal_amount"));
             $orderNumber = $args->getReturn();
