@@ -187,7 +187,7 @@ class Shopware_Plugins_Frontend_Intrum_Bootstrap extends Shopware_Components_Plu
             'value' => null,
 			'scope' => \Shopware\Models\Config\Element::SCOPE_SHOP
         ));
-        $form->setElement('text', 'defaultpayment', array(
+        $form->setElement('text', 'defaultpayment_intrum', array(
             'label' => 'Default payment method',
             'value' => null,
             'scope' => \Shopware\Models\Config\Element::SCOPE_SHOP
@@ -386,8 +386,8 @@ CHANGE COLUMN `xml_responce` `xml_responce` TEXT CHARACTER SET 'utf8' COLLATE 'u
             'description' => 'Intrum Credit design check',
             'link' => 'http://www.intrum.com',
             'author' =>  'Intrum.com',
-            'copyright' =>  'Intrum.com 2020',
-            'version' =>  '1.4.5'
+            'copyright' =>  'Intrum.com 2021',
+            'version' =>  '1.4.6'
         );
     }
 
@@ -503,11 +503,11 @@ CHANGE COLUMN `xml_responce` `xml_responce` TEXT CHARACTER SET 'utf8' COLLATE 'u
         foreach($DeniedMethods as &$val) {
             $val = trim($val);
         }
-        $defaultPaymentId = 0;
+        $defaultpaymentIntrumId = 0;
         $sql = 'SELECT `id` FROM s_core_paymentmeans WHERE name = ?';
-        $id = Shopware()->Db()->fetchOne($sql, array($config->get("defaultpayment")));
+        $id = Shopware()->Db()->fetchOne($sql, array($config->get("defaultpayment_intrum")));
         if ($id != null) {
-            $defaultPaymentId = $id;
+            $defaultpaymentIntrumId = $id;
         }
 
         $return = Array();
@@ -515,8 +515,8 @@ CHANGE COLUMN `xml_responce` `xml_responce` TEXT CHARACTER SET 'utf8' COLLATE 'u
             if (in_array($m["name"], $DeniedMethods)) {
                 if (isset($_SESSION["Shopware"]["sOrderVariables"]["sUserData"]["additional"]["user"]["paymentID"]) && isset($user["additional"]["user"]["customerId"]) && $m["id"] == $_SESSION["Shopware"]["sOrderVariables"]["sUserData"]["additional"]["user"]["paymentID"]) {
                     $_SESSION["intrum"]["paymentMessage"] = $config->get("decline_message_" . (String)$status);
-                    $_SESSION["Shopware"]["sOrderVariables"]["sUserData"]["additional"]["user"]["paymentID"] = $defaultPaymentId;
-                    $sql = "UPDATE s_user SET paymentID = ".intval($defaultPaymentId)." WHERE id = ".intval($user["additional"]["user"]["customerId"]);
+                    $_SESSION["Shopware"]["sOrderVariables"]["sUserData"]["additional"]["user"]["paymentID"] = $defaultpaymentIntrumId;
+                    $sql = "UPDATE s_user SET paymentID = ".intval($defaultpaymentIntrumId)." WHERE id = ".intval($user["additional"]["user"]["customerId"]);
                     Shopware()->Db()->exec($sql);
                 }
                 continue;
@@ -600,19 +600,19 @@ CHANGE COLUMN `xml_responce` `xml_responce` TEXT CHARACTER SET 'utf8' COLLATE 'u
         $sql = "SELECT paymentID FROM s_user WHERE id = " . intval($user["additional"]["user"]["customerId"]);
         $paymentMethodId = Shopware()->Db()->fetchOne($sql);
 
-        $defaultPaymentId = 0;
+        $defaultpaymentIntrumId = 0;
         $sql = 'SELECT `id` FROM s_core_paymentmeans WHERE name = ?';
-        $id = Shopware()->Db()->fetchOne($sql, array($config->get("defaultpayment")));
+        $id = Shopware()->Db()->fetchOne($sql, array($config->get("defaultpayment_intrum")));
         if ($id != null) {
-            $defaultPaymentId = $id;
+            $defaultpaymentIntrumId = $id;
         }
         if (!empty($paymentMethodId) && !empty($user["additional"]["user"]["customerId"])) {
             $method = Shopware()->Modules()->Admin()->sGetPaymentMeanById($paymentMethodId);
             if (in_array($method["name"], $DeniedMethods)) {
                 $_SESSION["intrum"]["paymentMessage"] = $config->get("decline_message_" . (String)$status);
-                $_SESSION["Shopware"]["sPaymentID"] = $defaultPaymentId;
-                $_SESSION["Shopware"]["sOrderVariables"]["sUserData"]["additional"]["user"]["paymentID"] = $defaultPaymentId;
-                $sql = "UPDATE s_user SET paymentID = ".intval($defaultPaymentId)." WHERE id = " . intval($user["additional"]["user"]["customerId"]);
+                $_SESSION["Shopware"]["sPaymentID"] = $defaultpaymentIntrumId;
+                $_SESSION["Shopware"]["sOrderVariables"]["sUserData"]["additional"]["user"]["paymentID"] = $defaultpaymentIntrumId;
+                $sql = "UPDATE s_user SET paymentID = ".intval($defaultpaymentIntrumId)." WHERE id = " . intval($user["additional"]["user"]["customerId"]);
                 Shopware()->Db()->exec($sql);
             }
         }
@@ -673,11 +673,11 @@ CHANGE COLUMN `xml_responce` `xml_responce` TEXT CHARACTER SET 'utf8' COLLATE 'u
                 }
                 $_SESSION["intrum"]["status"] = $status;
             }
-            $defaultPaymentId = 0;
+        $defaultpaymentIntrumId = 0;
             $sql = 'SELECT `id` FROM s_core_paymentmeans WHERE name = ?';
-            $id = Shopware()->Db()->fetchOne($sql, array($config->get("defaultpayment")));
+            $id = Shopware()->Db()->fetchOne($sql, array($config->get("defaultpayment_intrum")));
             if ($id != null) {
-                $defaultPaymentId = $id;
+                $defaultpaymentIntrumId = $id;
             }
             if (isset($_SESSION["intrum"]["status"])) {
                 $status = intval($_SESSION["intrum"]["status"]);
@@ -686,8 +686,8 @@ CHANGE COLUMN `xml_responce` `xml_responce` TEXT CHARACTER SET 'utf8' COLLATE 'u
                 $sql = 'SELECT `name`, `description` FROM s_core_paymentmeans WHERE id = ' . intval($_SESSION["Shopware"]["sOrderVariables"]["sUserData"]["additional"]["user"]["paymentID"]);
                 $name = Shopware()->Db()->fetchRow($sql);
                 if (in_array($name["name"], $DeniedMethods)) {
-                    $_SESSION["Shopware"]["sOrderVariables"]["sUserData"]["additional"]["user"]["paymentID"] = $defaultPaymentId;
-                    $sql = "UPDATE s_user SET paymentID = ".intval($defaultPaymentId)." WHERE id = " . intval($user["additional"]["user"]["customerId"]);
+                    $_SESSION["Shopware"]["sOrderVariables"]["sUserData"]["additional"]["user"]["paymentID"] = $defaultpaymentIntrumId;
+                    $sql = "UPDATE s_user SET paymentID = ".intval($defaultpaymentIntrumId)." WHERE id = " . intval($user["additional"]["user"]["customerId"]);
                     Shopware()->Db()->exec($sql);
                     $_SESSION["intrum"]["message"] = $config->get("decline_message_" . (String)$status);
                     header("Location:" . Shopware()->Router()->assemble(array('module' => 'frontend', 'controller' => 'checkout', 'action' => 'cart')));
